@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from flask import Blueprint, request
 from sqlalchemy.testing import db
 
-from zotcards.server.model import User, CardSet, Card, AnswerChoice
+# from zotcards.server.model import User, CardSet, Card, AnswerChoice
 
 api = Blueprint("api", __name__)
 
@@ -83,6 +83,7 @@ def get_question():
 
     notes = data.get('notes')
     question_type = data.get('question_type')
+    print(notes)
 
     notes_prompt = f"""Generate 5 {question_type} questions based on the notes I have provided below. Format it in JSON format like so:
         {{
@@ -101,5 +102,5 @@ def get_question():
     Here are the notes: '"""
 
     final_prompt = notes_prompt + notes
-    response = get_gpt_message(final_prompt)
-    return response, 200
+    # response = get_gpt_message(final_prompt)
+    # return response, 200

@@ -1,5 +1,8 @@
 {
   "devDependencies": {
     "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "openai": "^4.15.0"
   }
 }
