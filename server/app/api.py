@@ -130,7 +130,7 @@ def get_question():
     response = get_gpt_message(final_prompt)
 
     parsed_set = gpt_string_to_array(response)
-    requests.post(create_card_set(parsed_set))  # populates database
+    create_card_set(parsed_set)  # populates database
 
     return parsed_set, 200
     # return None, 200
