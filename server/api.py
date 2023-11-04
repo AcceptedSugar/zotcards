@@ -1,4 +1,9 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
+import json
+
+from sqlalchemy.testing import db
+
+from zotcards.server.model import User
 
 api = Blueprint("api", __name__)
 
@@ -10,10 +15,10 @@ def index():
 
 @api.route("/api/auth/signup", methods=["GET", "POST"])
 def testdata():
-    data = request.data
+    data = request.json
 
-    # new_user = User(email=email)
-    # db.session.add(new_user)
-    # db.session.commit()
+    email = jsonify(data.get('email'))
 
-    return data
+    new_user = User(email=email)
+    db.session.add(new_user)
+    db.session.commit()
