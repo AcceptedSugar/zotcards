@@ -1,5 +1,8 @@
 {
   "devDependencies": {
     "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "next": "^14.0.1"
   }
 }
