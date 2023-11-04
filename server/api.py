@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from flask import Blueprint, request
 from sqlalchemy.testing import db
 
-from zotcards.server.model import User, CardSet, Card, AnswerChoice
+from .model import User, CardSet, Card, AnswerChoice
 
 api = Blueprint("api", __name__)
 
