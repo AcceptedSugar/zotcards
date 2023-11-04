@@ -1,8 +1,10 @@
 import os
+
 import openai
 from dotenv import load_dotenv
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 from sqlalchemy.testing import db
+import json
 
 from .model import User, CardSet, Card, AnswerChoice
 
@@ -26,28 +28,60 @@ def signup():
     db.session.commit()
 
 
+def gpt_string_to_array(string):
+    string = string.replace("'", '"')
+    result = list(json.loads(string).values())
+    return result
+
+
 @api.route("/api/auth/create-card-set", methods=["GET", "POST"])
-def create_card_set():
-    data = request.json
-
-    # GET DATA
-
-    #
-
-    # CHANGE
+def create_card_set(parsed_set):
+    
     card_set = CardSet()
-    cards = [Card()]
-    answer_choices = [AnswerChoice()]
+    cards = []
 
-    for card in cards:
-        card_set.cards.append(card)
-
-    for answer_choice in answer_choices:
-        card_set.cards.append(answer_choice)
-    #
+    for card in parsed_set:
+        answer_choices = []
+        for answer in card["choices"]:
+            if answer == card["correct"]:
+                answer_choices.append(AnswerChoice(answer_text=card["choices"]["answer"], is_correct=True))
+            else:
+                answer_choices.append(AnswerChoice(answer_text=card["choices"]["answer"], is_correct=True))
+        cards.append(Card(question_text=card, answer_choices=answer_choices))
 
     db.session.add(card_set)
     db.session.commit()
+
+
+@api.route("/api/populate_database", methods=["GET", "POST"])
+def populate_database():
+    response = get_question()
+    parsed_set = gpt_string_to_array(response)
+    create_card_set(parsed_set)
+
+
+@api.route("/api/get_user_sets", methods=["GET", "POST"])
+def get_user_sets():
+    data = request.json
+
+    user_email = data.get('user_email')
+
+    user = User.query.filter_by(email=user_email).first()
+
+    card_sets = user.card_sets
+
+    response = {}
+
+    for i, card_set in enumerate(card_sets):
+        response[i] = {
+            "title": card_set.title,
+            "progress": card_set.progress,
+            "last_studied": card_set.last_studied,
+            "user_id": card_set.user_id
+        }
+
+    return jsonify(response)
+
 
 
 # ********** GPT API ********** #
@@ -82,7 +116,6 @@ def get_question():
 
     notes = data.get('notes')
     question_type = data.get('question_type')
-    print(notes)
 
     notes_prompt = f"""Generate 5 {question_type} questions based on the notes I have provided below. Format it in JSON format like so: 
         {{
@@ -101,7 +134,6 @@ def get_question():
 
         I gave the structure for one question above but repeat for the other questions too in the same JSON object.
         Here are the notes: """
-
 
     final_prompt = notes_prompt + notes
     response = get_gpt_message(final_prompt)
