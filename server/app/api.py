@@ -1,6 +1,7 @@
 import os
 
 import openai
+import requests
 from dotenv import load_dotenv
 from flask import Blueprint, request, jsonify
 from sqlalchemy.testing import db
@@ -52,11 +53,11 @@ def create_card_set(parsed_set):
     db.session.commit()
 
 
-#@api.route("/api/populate_database", methods=["GET", "POST"])
-#def populate_database():
-#    response = get_question()
-#    parsed_set = gpt_string_to_array(response)
-#    create_card_set(parsed_set)
+@api.route("/api/populate_database", methods=["GET", "POST"])
+def populate_database():
+    response = get_question()
+    parsed_set = gpt_string_to_array(response)
+    create_card_set(parsed_set)
 
 
 @api.route("/api/get_user_sets", methods=["GET", "POST"])
@@ -111,7 +112,7 @@ def get_question():
     # notes is the string of text representing the person's notes
     # question_type is either "MCQ" or "TrueFalse"
 
-    data = request.json
+    data = request.get_json()
 
     notes = data.get('notes')
     question_type = data.get('question_type')
@@ -142,3 +143,12 @@ def get_question():
 
     #return response, 200
     return None, 200
+
+
+
+# TEST
+
+@api.route("/api/test", methods=["GET", "POST"])
+def api_test():
+    return jsonify({"message": "Hello from Flask backend!"}
+)
