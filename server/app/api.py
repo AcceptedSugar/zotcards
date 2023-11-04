@@ -53,6 +53,12 @@ def create_card_set(parsed_set):
     db.session.commit()
 
 
+@api.route("/api/populate_database", methods=["GET", "POST"])
+def populate_database():
+    response = get_question()
+    parsed_set = gpt_string_to_array(response)
+    create_card_set(parsed_set)
+
 
 @api.route("/api/get_user_sets", methods=["GET", "POST"])
 def get_user_sets():
