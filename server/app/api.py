@@ -102,6 +102,7 @@ def get_question():
     I gave the object structure for one question above but repeat for the other questions too in the same list. 
     Here are the notes: """
 
+
     final_prompt = notes_prompt + notes
     response = get_gpt_message(final_prompt)
     return response, 200
