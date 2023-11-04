@@ -3,6 +3,7 @@ import Image from 'next/image'
 import styles from './page.module.css'
 import { useState, useEffect, useRef } from 'react'
 import next from 'next';
+import MyComponent from "@/app/test/page";
 
 function Card( {questions, currentQuestion } ) {
   const currentQuestionNumber = useRef(0)
@@ -97,6 +98,7 @@ export default function Home() {
       <main className={styles.main}>
         <div className="main">
           <div className="generate-contain">
+            <MyComponent  />
             <h1>Transform your Class Notes into Self-Testing </h1>
               <form action="#">
               <textarea onChange={handleNoteUpdate} className ={styles.generate} rows="4" cols="50" placeholder='Copy and Paste your Notes Here...'></textarea>
