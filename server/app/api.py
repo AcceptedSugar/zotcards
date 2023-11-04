@@ -1,20 +1,14 @@
+import json
 import os
 
 import openai
-import requests
 from dotenv import load_dotenv
 from flask import Blueprint, request, jsonify
 from sqlalchemy.testing import db
-import json
 
 from .model import User, CardSet, Card, AnswerChoice
 
 api = Blueprint("api", __name__)
-
-
-@api.route("/")
-def index():
-    return "index"
 
 
 @api.route("/api/auth/signup", methods=["GET", "POST"])
@@ -27,29 +21,6 @@ def signup():
     db.session.add(new_user)
     db.session.commit()
 
-
-def gpt_string_to_array(string):
-    string = string.replace("'", '"')
-    result = list(json.loads(string).values())
-    return result
-
-
-def create_card_set(parsed_set):
-    
-    card_set = CardSet()
-    cards = []
-
-    for card in parsed_set:
-        answer_choices = []
-        for answer in card["choices"]:
-            if answer == card["correct"]:
-                answer_choices.append(AnswerChoice(answer_text=card["choices"]["answer"], is_correct=True))
-            else:
-                answer_choices.append(AnswerChoice(answer_text=card["choices"]["answer"], is_correct=True))
-        cards.append(Card(question_text=card, answer_choices=answer_choices))
-
-    db.session.add(card_set)
-    db.session.commit()
 
 @api.route("/api/get_user_sets", methods=["GET", "POST"])
 def get_user_sets():
@@ -74,18 +45,11 @@ def get_user_sets():
     return jsonify(response)
 
 
-
 # ********** GPT API ********** #
 
 load_dotenv()
 API_KEY = os.environ.get("API_KEY")
 openai.api_key = API_KEY
-
-
-def get_gpt_message(prompt, model="gpt-3.5-turbo"):
-    messages = [{"role": "user", "content": prompt}]
-    response = openai.ChatCompletion.create(model=model, messages=messages, temperature=0)
-    return response.choices[0].message["content"]
 
 
 # this is a test function to see if GPT is returning any text or if API is not working
@@ -96,6 +60,35 @@ def chat():
 
     response = get_gpt_message(chat_text)
     return response, 200
+
+
+def gpt_string_to_array(string):
+    string = string.replace("'", '"')
+    result = list(json.loads(string).values())
+    return result
+
+
+def get_gpt_message(prompt, model="gpt-3.5-turbo"):
+    messages = [{"role": "user", "content": prompt}]
+    response = openai.ChatCompletion.create(model=model, messages=messages, temperature=0)
+    return response.choices[0].message["content"]
+
+
+def create_card_set(parsed_set):
+    card_set = CardSet()
+    cards = []
+
+    for card in parsed_set:
+        answer_choices = []
+        for answer in card["choices"]:
+            if answer == card["correct"]:
+                answer_choices.append(AnswerChoice(answer_text=card["choices"]["answer"], is_correct=True))
+            else:
+                answer_choices.append(AnswerChoice(answer_text=card["choices"]["answer"], is_correct=True))
+        cards.append(Card(question_text=card, answer_choices=answer_choices))
+
+    db.session.add(card_set)
+    db.session.commit()
 
 
 @api.route("/api/get-question", methods=["GET", "POST"])
@@ -133,8 +126,6 @@ def get_question():
     create_card_set(parsed_set)  # populates database
 
     return parsed_set, 200
-    # return None, 200
-
 
 
 # TEST
@@ -142,4 +133,4 @@ def get_question():
 @api.route("/api/test", methods=["GET", "POST"])
 def api_test():
     return jsonify({"message": "Hello from Flask backend!"}
-)
+                   )
