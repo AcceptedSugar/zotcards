@@ -1,7 +1,8 @@
 import os
+
 import openai
 from dotenv import load_dotenv
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 from sqlalchemy.testing import db
 import json
 
@@ -50,6 +51,31 @@ def create_card_set(parsed_set):
 
     db.session.add(card_set)
     db.session.commit()
+
+
+
+@api.route("/api/get_user_sets", methods=["GET", "POST"])
+def get_user_sets():
+    data = request.json
+
+    user_email = data.get('user_email')
+
+    user = User.query.filter_by(email=user_email).first()
+
+    card_sets = user.card_sets
+
+    response = {}
+
+    for i, card_set in enumerate(card_sets):
+        response[i] = {
+            "title": card_set.title,
+            "progress": card_set.progress,
+            "last_studied": card_set.last_studied,
+            "user_id": card_set.user_id
+        }
+
+    return jsonify(response)
+
 
 
 # ********** GPT API ********** #
