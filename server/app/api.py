@@ -1,6 +1,7 @@
 import os
 
 import openai
+import requests
 from dotenv import load_dotenv
 from flask import Blueprint, request, jsonify
 from sqlalchemy.testing import db
@@ -36,7 +37,6 @@ def gpt_string_to_array(string):
 
 @api.route("/api/auth/create-card-set", methods=["GET", "POST"])
 def create_card_set(parsed_set):
-    
     card_set = CardSet()
     cards = []
 
@@ -55,7 +55,9 @@ def create_card_set(parsed_set):
 
 @api.route("/api/populate_database", methods=["GET", "POST"])
 def populate_database():
-    response = get_question()
+    data = request.json
+
+    response = requests.get(url_for('api.get_question'), json=data)
     parsed_set = gpt_string_to_array(response)
     create_card_set(parsed_set)
 
@@ -83,12 +85,12 @@ def get_user_sets():
     return jsonify(response)
 
 
-
 # ********** GPT API ********** #
-
+#
 load_dotenv()
 API_KEY = os.environ.get("API_KEY")
 openai.api_key = API_KEY
+
 
 
 def get_gpt_message(prompt, model="gpt-3.5-turbo"):
@@ -112,7 +114,7 @@ def get_question():
     # notes is the string of text representing the person's notes
     # question_type is either "MCQ" or "TrueFalse"
 
-    data = request.json
+    data = request.get_json()
 
     notes = data.get('notes')
     question_type = data.get('question_type')
@@ -138,3 +140,12 @@ def get_question():
     final_prompt = notes_prompt + notes
     response = get_gpt_message(final_prompt)
     return response, 200
+
+
+
+# TEST
+
+@api.route("/api/test", methods=["GET", "POST"])
+def api_test():
+    return jsonify({"message": "Hello from Flask backend!"}
+)
