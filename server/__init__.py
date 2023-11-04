@@ -1,6 +1,8 @@
 from flask import Flask
 from flask_cors import CORS
 
+from zotcards.server.api import api
+
 
 def create_app():
     app = Flask(__name__)
@@ -8,5 +10,6 @@ def create_app():
 
     app.config["SECRET_KEY"] = "my-secret"
 
-    return app
+    app.register_blueprint(api)
 
+    return app

@@ -2,8 +2,9 @@ import openai
 import os
 from dotenv import load_dotenv, dotenv_values
 from flask import Flask, request, jsonify
+from zotcards.server.api import api
+from . import create_app
 
-app = Flask(__name__)
 # cors = CORS(app)
 # app.config['CORS_HEADERS'] = 'Content-Type'
 
@@ -56,6 +57,7 @@ def get_question(notes, question_type):
 def home():
    return "Home"
 
+if __name__ == '__main__':
+    app = create_app()
 
-if __name__ == "__main__":
-   app.run(debug=True)
+    app.run(debug=True)
