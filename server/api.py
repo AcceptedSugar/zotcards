@@ -1,16 +1,19 @@
-import requests
-from flask import Blueprint, jsonify, request
-from model import db, User
+from flask import Blueprint, request
 
 api = Blueprint("api", __name__)
 
 
-@api.route("/api/auth/signup", methods=["POST"])
+@api.route("/")
+def index():
+    return "index"
+
+
+@api.route("/api/auth/signup", methods=["GET", "POST"])
 def testdata():
-    email = request.args.get('email')
-    new_user = User(email=email)
+    data = request.data
 
-    db.session.add(new_user)
-    db.session.commit()
+    # new_user = User(email=email)
+    # db.session.add(new_user)
+    # db.session.commit()
 
-    return "success"
+    return data
