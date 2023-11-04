@@ -74,12 +74,15 @@ def chat():
     return response, 200
 
 
-@api.route("/api/get-question/<notes>/<question_type>")
-def get_question(notes, question_type):
+@api.route("/api/get-question")
+def get_question():
     # notes is the string of text representing the person's notes
     # question_type is either "MCQ" or "TrueFalse"
 
-    # notes =
+    data = request.json
+
+    notes = data.get('notes')
+    question_type = data.get('question_type')
 
     notes_prompt = f"""Generate 5 {question_type} questions based on the notes I have provided below. 
     Format it in a list as shown below, with each element in the list representing an object of the information
