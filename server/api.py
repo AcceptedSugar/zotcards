@@ -65,7 +65,7 @@ def get_gpt_message(prompt, model="gpt-3.5-turbo"):
 
 
 # this is a test function to see if GPT is returning any text or if API is not working
-@api.route("/api/chat")
+@api.route("/api/chat", methods=["GET", "POST"])
 def chat():
     data = request.json
     chat_text = data.get('chat_text')
@@ -74,7 +74,7 @@ def chat():
     return response, 200
 
 
-@api.route("/api/get-question")
+@api.route("/api/get-question", methods=["GET", "POST"])
 def get_question():
     # notes is the string of text representing the person's notes
     # question_type is either "MCQ" or "TrueFalse"
