@@ -21,7 +21,7 @@ def index():
 def signup():
     data = request.json
 
-    user_email = data.get('user_email') # FRONTEND NEEDS TO PROVIDE
+    user_email = data.get('user_email')  # FRONTEND NEEDS TO PROVIDE
 
     new_user = User(email=user_email)
     db.session.add(new_user)
@@ -34,7 +34,6 @@ def gpt_string_to_array(string):
     return result
 
 
-@api.route("/api/auth/create-card-set", methods=["GET", "POST"])
 def create_card_set(parsed_set):
     
     card_set = CardSet()
@@ -51,14 +50,6 @@ def create_card_set(parsed_set):
 
     db.session.add(card_set)
     db.session.commit()
-
-
-# @api.route("/api/populate_database", methods=["GET", "POST"])
-# def populate_database():
-#     response = get_question()
-#     parsed_set = gpt_string_to_array(response)
-#     create_card_set(parsed_set)
-
 
 @api.route("/api/get_user_sets", methods=["GET", "POST"])
 def get_user_sets():
@@ -141,8 +132,8 @@ def get_question():
     parsed_set = gpt_string_to_array(response)
     requests.post(create_card_set(parsed_set))  # populates database
 
-    #return response, 200
-    return None, 200
+    return parsed_set, 200
+    # return None, 200
 
 
 
