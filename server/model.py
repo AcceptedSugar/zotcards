@@ -14,7 +14,7 @@ class CardSet(db.Model):
     title = db.Column(db.String(100), nullable=False)
 
     progress = db.Column(db.Integer, default=0, nullable=False)
-
+    last_studied = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
     cards = db.relationship('CardSet', backref='user')
 
 class Card(db.Model):
