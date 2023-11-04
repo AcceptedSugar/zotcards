@@ -19,6 +19,16 @@ adds user to db
 }
 ```
 
+**/api/get_user_sets**
+
+returns sets of user
+
+```json
+{
+  "user_email": ""
+}
+```
+
 **/api/auth/create-card-set**
 
 adds card set to db
