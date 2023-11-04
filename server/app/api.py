@@ -21,10 +21,9 @@ def index():
 def signup():
     data = request.json
 
-    # GET DATA
-    #
+    user_email = data.get('user_email') # FRONTEND NEEDS TO PROVIDE
 
-    new_user = User(email='')  # CHANGE
+    new_user = User(email=user_email)
     db.session.add(new_user)
     db.session.commit()
 
@@ -37,6 +36,7 @@ def gpt_string_to_array(string):
 
 @api.route("/api/auth/create-card-set", methods=["GET", "POST"])
 def create_card_set(parsed_set):
+    
     card_set = CardSet()
     cards = []
 
@@ -55,9 +55,7 @@ def create_card_set(parsed_set):
 
 @api.route("/api/populate_database", methods=["GET", "POST"])
 def populate_database():
-    data = request.json
-
-    response = requests.get(url_for('api.get_question'), json=data)
+    response = get_question()
     parsed_set = gpt_string_to_array(response)
     create_card_set(parsed_set)
 
@@ -85,12 +83,12 @@ def get_user_sets():
     return jsonify(response)
 
 
+
 # ********** GPT API ********** #
-#
+
 load_dotenv()
 API_KEY = os.environ.get("API_KEY")
 openai.api_key = API_KEY
-
 
 
 def get_gpt_message(prompt, model="gpt-3.5-turbo"):
@@ -139,7 +137,12 @@ def get_question():
 
     final_prompt = notes_prompt + notes
     response = get_gpt_message(final_prompt)
-    return response, 200
+
+    parsed_set = gpt_string_to_array(response)
+    create_card_set(parsed_set) # populates database
+
+    #return response, 200
+    return None, 200
 
 
 
