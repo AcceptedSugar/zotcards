@@ -82,6 +82,7 @@ def get_question():
 
     notes = data.get('notes')
     question_type = data.get('question_type')
+    print(notes)
 
     notes_prompt = f"""Generate 5 {question_type} questions based on the notes I have provided below. 
     Format it in a list as shown below, with each element in the list representing an object of the information
@@ -104,5 +105,5 @@ def get_question():
 
 
     final_prompt = notes_prompt + notes
-    response = get_gpt_message(final_prompt)
-    return response, 200
+    # response = get_gpt_message(final_prompt)
+    # return response, 200
