@@ -1,5 +1,4 @@
-/* /* generate page / */
-
+/* generate page */
 .main {
   display: grid;
   place-content: center;
@@ -8,6 +7,59 @@
   margin: 0 var(--universal-margin);
 
 }
+.generate-contain {
+  margin: 0 10vw;
+}
+
+/* libraries */
+
+/* buttons */
+
+/* form container */
+.form {
+  display: grid;
+  place-content: center;
+  gap: 40px;
+  justify-items: center;
+}
+.generate {
+  width: auto;
+  margin: 0 auto;
+  height: 20vh;
+  resize: none;
+  border-radius: var(--container-border-radius);
+  padding: var( --container-padding) var( --container-padding);
+  border: var(--border-color) 2px solid;
+  background-color: var(--background-color);
+  transition: border-color 200ms;
+}
+
+.icon-button {
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ flex-direction: row;
+ padding: var(--btn-vh-spacing) var(--btn-vw-spacing);
+ background-color: var(--accent-color);
+ border: none;
+ border-radius: var(--button-border-radius);
+ width: max-content;
+}
+.icon-button p {
+  color: white;
+}
+
+/* interactivity */
+.generate:hover {
+  border-color: var(--accent-color);
+  background-color: var(--focus-background);
+}
+.generate:focus {
+  color: white;
+  border-color: var(--accent-color);
+}
+
+
 
 .generate-contain {
   margin: 0 20vw;
