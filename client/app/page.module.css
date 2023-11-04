@@ -1,4 +1,66 @@
+/* generate page */
 .main {
+  display: grid;
+  place-content: center;
+  max-width: 100vw;
+  height: 100vh;
+  margin: 0 var(--universal-margin);
+  
+}
+.generate-contain {
+  margin: 0 10vw;
+}
+
+/* libraries */
+
+/* buttons */
+
+/* form container */
+.form {
+  display: grid;
+  place-content: center;
+  gap: 40px;
+  justify-items: center;
+}
+.generate {
+  width: auto;
+  margin: 0 auto;
+  height: 20vh;
+  resize: none;
+  border-radius: var(--container-border-radius);
+  padding: var( --container-padding) var( --container-padding);
+  border: var(--border-color) 2px solid;
+  background-color: var(--background-color);
+  transition: border-color 200ms;
+}
+
+.icon-button {
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ flex-direction: row;
+ padding: var(--btn-vh-spacing) var(--btn-vw-spacing);
+ background-color: var(--accent-color);
+ border: none;
+ border-radius: var(--button-border-radius);
+ width: max-content;
+}
+.icon-button p {
+  color: white;
+}
+
+/* interactivity */
+.generate:hover {
+  border-color: var(--accent-color);
+  background-color: var(--focus-background);
+}
+.generate:focus {
+  color: white;
+  border-color: var(--accent-color);
+}
+
+
+/* .main {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -108,7 +170,7 @@
   position: relative;
 }
 /* Enable hover only on non-touch devices */
-@media (hover: hover) and (pointer: fine) {
+/* @media (hover: hover) and (pointer: fine) {
   .card:hover {
     background: rgba(var(--card-rgb), 0.1);
     border: 1px solid rgba(var(--card-border-rgb), 0.15);
@@ -125,7 +187,6 @@
   }
 }
 
-/* Mobile */
 @media (max-width: 700px) {
   .content {
     padding: 4rem;
@@ -202,7 +263,7 @@
   }
 }
 
-/* Tablet and Smaller Desktop */
+
 @media (min-width: 701px) and (max-width: 1120px) {
   .grid {
     grid-template-columns: repeat(2, 50%);
@@ -226,4 +287,4 @@
   to {
     transform: rotate(0deg);
   }
-}
+} */
