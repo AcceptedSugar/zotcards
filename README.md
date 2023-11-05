@@ -51,4 +51,4 @@ Most of us gained deeper familiarity with React and version control using Git, w
 
 For ZotCards, features we have envisioned include the ability to reference and review previously created card sets, a card set sharing feature, pop ups with suggested resources and GPT-generated corrections if you miss a set, more question types (such as vocabulary definitions, in which the OpenAI API would evaluate user answers), etc. 
 
-Some of these features are included on the mockup images attached to this DevPost :)
+:)
