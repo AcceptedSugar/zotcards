@@ -87,40 +87,9 @@ function Card({questions, currentQuestion, setCurrentQuestion}) {
 }
 
 export default function Home() {
-    const [questions, setQuestions] = useState([{
-        'question': 'What is the major theme of the first tale?',
-        'choices': {
-            'A': 'The transitoriness of all things',
-            'B': 'The efficacy of prayers',
-            'C': 'How storytelling can mystify history',
-            'D': 'The mishearing of humans'
-        },
-        'correct': 'C'
-    }, {
-        'question': 'Which character in the first tale is compared to the Grinch?',
-        'choices': {'A': 'Ciappelletto', 'B': 'Cepparello', 'C': 'The priest', 'D': 'The usurers'},
-        'correct': 'A'
-    }, {
-        'question': 'What is one of the vices of Ciappelletto?',
-        'choices': {'A': 'Churchgoing', 'B': 'Blasphemy', 'C': 'Sobriety', 'D': 'Honesty'},
-        'correct': 'B'
-    }, {
-        'question': 'Where does Ciappelletto live?',
-        'choices': {'A': 'Florence', 'B': 'Rome', 'C': 'Paris', 'D': 'Venice'},
-        'correct': 'C'
-    }, {
-        'question': 'What happens to Ciappelletto after he falls ill?',
-        'choices': {
-            'A': 'He becomes a popular saint',
-            'B': 'He becomes a usurer',
-            'C': 'He becomes a priest',
-            'D': 'He becomes a storyteller'
-        },
-        'correct': 'A'
-    }])
-    const [currentQuestion, setCurrentQuestion] = useState(() => {
-        return questions[0]
-    })
+    const [questions, setQuestions] = useState()
+    const [currentQuestion, setCurrentQuestion] = useState()
+
     const [notes, setNotes] = useState()
     const [questionType, setQuestionType] = useState("MCQ")
 
@@ -142,13 +111,15 @@ export default function Home() {
     fetch(url, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        mode: 'no-cors',
+        // mode: 'no-cors',
         body: JSON.stringify(request_body)
         })
             .then(response => response.json())
             .then(data => {
+                console.log('server response flash cards printed below: ')
                 console.log(data);
                 setQuestions(data);
+                setCurrentQuestion(data[0])
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -194,3 +165,37 @@ export default function Home() {
 
     )
 }
+
+
+
+// [{
+//   'question': 'What is the major theme of the first tale?',
+//   'choices': {
+//       'A': 'The transitoriness of all things',
+//       'B': 'The efficacy of prayers',
+//       'C': 'How storytelling can mystify history',
+//       'D': 'The mishearing of humans'
+//   },
+//   'correct': 'C'
+// }, {
+//   'question': 'Which character in the first tale is compared to the Grinch?',
+//   'choices': {'A': 'Ciappelletto', 'B': 'Cepparello', 'C': 'The priest', 'D': 'The usurers'},
+//   'correct': 'A'
+// }, {
+//   'question': 'What is one of the vices of Ciappelletto?',
+//   'choices': {'A': 'Churchgoing', 'B': 'Blasphemy', 'C': 'Sobriety', 'D': 'Honesty'},
+//   'correct': 'B'
+// }, {
+//   'question': 'Where does Ciappelletto live?',
+//   'choices': {'A': 'Florence', 'B': 'Rome', 'C': 'Paris', 'D': 'Venice'},
+//   'correct': 'C'
+// }, {
+//   'question': 'What happens to Ciappelletto after he falls ill?',
+//   'choices': {
+//       'A': 'He becomes a popular saint',
+//       'B': 'He becomes a usurer',
+//       'C': 'He becomes a priest',
+//       'D': 'He becomes a storyteller'
+//   },
+//   'correct': 'A'
+// }]
