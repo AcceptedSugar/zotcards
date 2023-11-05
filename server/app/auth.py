@@ -1,5 +1,5 @@
-from flask import request, Blueprint
-from flask_login import LoginManager, logout_user
+from flask import request, Blueprint, jsonify
+from flask_login import LoginManager, logout_user, current_user
 
 from .model import db, User
 
@@ -26,6 +26,15 @@ def login():
         db.session.add(new_user)
         db.session.commit()
 
+
 @auth.route("/auth/logout", methods=["GET", "POST"])
 def logout():
     logout_user()
+
+
+@auth.route("/auth/is_authenticated", methods=["GET", "POST"])
+def is_authenticated():
+    data = {
+        "is_authenticated": current_user.is_authenticated
+    }
+    return jsonify(data)

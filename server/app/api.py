@@ -5,7 +5,7 @@ import secrets
 import openai
 from dotenv import load_dotenv
 from flask import Blueprint, request, jsonify
-from flask_login import current_user
+from flask_login import current_user, AnonymousUserMixin
 
 from .model import User, CardSet, Card, AnswerChoice, db
 
@@ -54,6 +54,10 @@ def chat():
 
 def gpt_string_to_array(string):
     string = string.replace("'", '"')
+    print(string)
+    print(json.loads(string))
+    print(json.loads(string).values())
+    print(list(json.loads(string).values()))
     result = list(json.loads(string).values())
     return result
 
@@ -67,7 +71,7 @@ def get_gpt_message(prompt, model="gpt-3.5-turbo"):
 def create_card_set(parsed_set):
     card_set = CardSet(title="test_title")
 
-    if current_user.is_authenticaed:
+    if not isinstance(current_user, AnonymousUserMixin):
         my_user = current_user
     else:
         my_user = User(email=secrets.token_hex(64))
@@ -94,7 +98,7 @@ def get_question():
     # notes is the string of text representing the person's notes
     # question_type is either "MCQ" or "TrueFalse"
 
-    data = request.get_json()
+    data = request.json
 
     notes = data.get('notes')
     question_type = data.get('question_type')

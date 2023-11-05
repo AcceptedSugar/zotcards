@@ -4,6 +4,7 @@ from flask_cors import CORS
 
 from .admin import admin
 from .api import api
+from .auth import login_manager
 from .model import db, User, CardSet, Card, AnswerChoice
 
 app = Flask(__name__)
@@ -17,6 +18,8 @@ admin.init_app(app)
 db.init_app(app)
 
 app.register_blueprint(api)
+
+login_manager.init_app(app)
 
 oauth = OAuth(app)
 google = oauth.register(

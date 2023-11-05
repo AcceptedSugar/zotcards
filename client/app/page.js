@@ -133,13 +133,16 @@ export default function Home() {
         e.preventDefault()
         console.log('getting flash cards')
         // const url = 'https://awwang3.pythonanywhere.com/api/get-question'
-        const url = 'http://127.0.0.1:5000/get-question'
+        const url = 'http://127.0.0.1:5000/api/get-question'
 
+        console.log(JSON.stringify(request_body))
 
         fetch(url, {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            mode: 'no-cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            // mode: 'no-cors',
             body: JSON.stringify(request_body)
         })
             .then(response => response.json())
