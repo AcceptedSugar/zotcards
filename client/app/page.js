@@ -8,84 +8,94 @@ import { useState, useEffect, useRef } from 'react'
 import next from 'next';
 import MyComponent from "@/app/test/page";
 
-function Card( {questions, currentQuestion } ) {
-  const currentQuestionNumber = useRef(0)
-  
-  // currentQuestion state starts at 
-  // when user selects the right answer, the answer choice box will light green 
-  // and the currentQuestion state will be 
+function AnswerChoice( { currentQuestionNumber, currentQuestion, answerChoice, questions, setCurrentQuestion } ) {
 
-  function getNextQuestion() { // called when the card is clicked
+  function getNextQuestion(e) { // called when the card is clicked
+    e.preventDefault();
     currentQuestionNumber.current += 1
-    questionKeys = Object.keys(questions)
 
-    const nextQuestionNumber = (currentQuestionNumber.current) % (questionKeys.length - 1)
-    const currentQuestionData = questions[questionKeys[nextQuestionNumber]]    
-    setCurrentQuestion(currentQuestionData)
-
-    // setCurrentQuestionNumber(prevQuestionNumber => prevQuestionNumber + 1)
+    const nextQuestionNumber = (currentQuestionNumber.current) % (questions.length - 1)
+    console.log(nextQuestionNumber)
+    setCurrentQuestion(questions[nextQuestionNumber])
   }
 
+  return (
+    <div> <button onClick={getNextQuestion}> <p> {currentQuestion.choices[answerChoice]} </p></button> </div>
+  )
 
-    // questionKeys.current = Object.keys(flashcard_questions) // list of the question keys, ['q1', 'q2', 'q3] etc.. 
-    // setQuestions(flashcard_questions)
-  
+}
 
-  // useEffect(() => { // get_gpt_flashcards runs whenever the button on the client is pressed 
-  //   get_gpt_flashcards()
-
-  // }, [])
+function Card( {questions, currentQuestion, setCurrentQuestion } ) {
+  const currentQuestionNumber = useRef(0)
 
   return (
     <div> 
-        This is a card!
-        <div> 
-          {currentQuestion.question}
+        <div className={styles["card-page"]}>
+          <div className={styles.cardNavContain}>
+            <div className={styles.progressBar}>
+
+            </div>
+            <div className={styles.close}>x</div>
+          </div>
+          <div className={styles["card-contain"]}>
+            <div> 
+              <h2>{currentQuestion.question}</h2>
+            </div>
+
+            <div> 
+              
+              {currentQuestion.choices['A']}
+              {currentQuestion.choices['B']}
+              {currentQuestion.choices['C']}
+              {currentQuestion.choices['D']}
+            </div>
+
+          </div>
+          
         </div>
-        <div> 
-          {currentQuestion.choices['A']}
-          {currentQuestion.choices['B']}
-          {currentQuestion.choices['C']}
-          {currentQuestion.choices['D']}
-        </div>
-        <button onClick={getNextQuestion}> Next Question </button>
+        
+        {/* <button onClick={getNextQuestion}> Next Question </button> */}
     </div>
   )
 }
 
 export default function Home() {
-  const [questions, setQuestions] = useState()
-  const [currentQuestion, setCurrentQuestion] = useState()
+  const [questions, setQuestions] = useState([{'question': 'What is the major theme of the first tale?', 'choices': {'A': 'The transitoriness of all things', 'B': 'The efficacy of prayers', 'C': 'How storytelling can mystify history', 'D': 'The mishearing of humans'}, 'correct': 'C'}, {'question': 'Which character in the first tale is compared to the Grinch?', 'choices': {'A': 'Ciappelletto', 'B': 'Cepparello', 'C': 'The priest', 'D': 'The usurers'}, 'correct': 'A'}, {'question': 'What is one of the vices of Ciappelletto?', 'choices': {'A': 'Churchgoing', 'B': 'Blasphemy', 'C': 'Sobriety', 'D': 'Honesty'}, 'correct': 'B'}, {'question': 'Where does Ciappelletto live?', 'choices': {'A': 'Florence', 'B': 'Rome', 'C': 'Paris', 'D': 'Venice'}, 'correct': 'C'}, {'question': 'What happens to Ciappelletto after he falls ill?', 'choices': {'A': 'He becomes a popular saint', 'B': 'He becomes a usurer', 'C': 'He becomes a priest', 'D': 'He becomes a storyteller'}, 'correct': 'A'}])
+  const [currentQuestion, setCurrentQuestion] = useState(() => { return questions[0] } )
   const [notes, setNotes] = useState()
   const [questionType, setQuestionType] = useState("MCQ")
+  
+  const request_body = {
+    'notes': notes,
+    'question_type': questionType
+  }
 
-  // function getNextQuestion() {
-  //   currentQuestionNumber.current += 1
-  //   questionKeys = Object.keys(questions)
-
-  //   const nextQuestionNumber = (currentQuestionNumber.current) % (questionKeys.length - 1)
-  //   const currentQuestionData = questions[questionKeys[nextQuestionNumber]]    
-  //   setCurrentQuestion(currentQuestionData)
-
-  //   // setCurrentQuestionNumber(prevQuestionNumber => prevQuestionNumber + 1)
-  // }
-
-  async function get_gpt_flashcards() {
+  async function get_gpt_flashcards(e) {
+    e.preventDefault()
     console.log('getting flash cards')
     const url = 'https://awwang3.pythonanywhere.com/api/get-question'
-    const request_body = {
-      'notes': notes,
-      'question_type': questionType
-    }
+    // fetch(url, {
+    //   method: "POST",
+    //   body: JSON.stringify(request_body)
+    // })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //       console.log(data);
+    //       setQuestions(data);
+    //       setCurrentQuestion(data['q1'])
+    //     })
+    //     .catch(error => {
+    //       console.error('Error:', error);
+    //     });
+    
+    // const flashcard_questions = await fetch(url, {
+    //   method: "POST",          
+    //   body: JSON.stringify(request_body)
+    // })
+    // console.log(flashcard_questions)
 
-    const flashcard_questions = await fetch(url, {
-      method: "POST",          
-      body: JSON.stringify(request_body)
-    })
-    console.log(flashcard_questions)
-
-    setQuestions(flashcard_questions)
-    setCurrentQuestion(flashcard_questions['q1'])
+    // setQuestions(flashcard_questions)
+    // setCurrentQuestion(flashcard_questions['q1'])
   }
 
   function handleNoteUpdate(e) {
@@ -99,25 +109,20 @@ export default function Home() {
   return (
     <>
       <main className={styles.main}>
-        <div className="main">
-          <div className="generate-contain">
-            <MyComponent  />
-            <h1>Transform your Class Notes into Self-Testing </h1>
+        <div className={styles.main}>
+          <div className={["generate-contain"]}>
+            <h1>Transform your Class Notes into <span>Flashcards</span> </h1>
               <form action="#" className = {styles.form}>
               <textarea onChange={handleNoteUpdate} className ={styles.generate} rows="4" cols="50" placeholder='Copy and Paste your Notes Here...'></textarea>
                 
                 <button onClick={get_gpt_flashcards} className={styles["icon-button"]}>
-                  <div className="icon">
-                    <FontAwesomeIcon icon={faEnvelope}/>
-                  </div>
-
                   <p>Transform notes</p>
-                  
                   
                 </button>
                 {
-                    questions && currentQuestion ? <Card questions={questions} currentQuestion={currentQuestion}/> : <p> no card now</p>
+                    questions && currentQuestion ? <Card questions={questions} currentQuestion={currentQuestion} setCurrentQuestion={setCurrentQuestion}/> : <p> no card now</p>
                 }
+              <Card questions={questions} currentQuestion={{question: "What is the name of the 52nd president of the United States?", choices: {A: "George", B: "Washington", C: "Franklin", D: "Rooselvet"} }}/>
                 <select value={questionType} onChange={handleQuestionTypeUpdate}>
                   <option value="MCQ"> MCQ </option>
                   <option value="True/False"> True/False </option>
