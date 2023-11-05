@@ -1,15 +1,11 @@
 {
-<<<<<<< HEAD
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
-    "@fortawesome/react-fontawesome": "^0.2.0"
-=======
+    "@fortawesome/react-fontawesome": "^0.2.0",
+    "next": "^14.0.1"
+  },
   "devDependencies": {
     "concurrently": "^8.2.2"
-  },
-  "dependencies": {
-    "next": "^14.0.1"
->>>>>>> 87dc9af9e7a90638ab7c4acd4bb579df3cb2564e
   }
 }
