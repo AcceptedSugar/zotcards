@@ -37,17 +37,31 @@ function Card( {questions, currentQuestion } ) {
 
   return (
     <div> 
-        This is a card!
-        <div> 
-          {currentQuestion.question}
+        <div className={styles["card-page"]}>
+          <div className={styles.cardNavContain}>
+            <div className={styles.progressBar}>
+
+            </div>
+            <div className={styles.close}>x</div>
+          </div>
+          <div className={styles["card-contain"]}>
+            <div> 
+              <h2>{currentQuestion.question}</h2>
+            </div>
+
+            <div> 
+              
+              {currentQuestion.choices['A']}
+              {currentQuestion.choices['B']}
+              {currentQuestion.choices['C']}
+              {currentQuestion.choices['D']}
+            </div>
+
+          </div>
+          
         </div>
-        <div> 
-          {currentQuestion.choices['A']}
-          {currentQuestion.choices['B']}
-          {currentQuestion.choices['C']}
-          {currentQuestion.choices['D']}
-        </div>
-        <button onClick={getNextQuestion}> Next Question </button>
+        
+        {/* <button onClick={getNextQuestion}> Next Question </button> */}
     </div>
   )
 }
@@ -98,24 +112,19 @@ export default function Home() {
   return (
     <>
       <main className={styles.main}>
-        <div className="main">
-          <div className="generate-contain">
-            <h1>Transform your Class Notes into Self-Testing </h1>
+        <div className={styles.main}>
+          <div className={["generate-contain"]}>
+            <h1>Transform your Class Notes into <span>Flashcards</span> </h1>
               <form action="#" className = {styles.form}>
               <textarea onChange={handleNoteUpdate} className ={styles.generate} rows="4" cols="50" placeholder='Copy and Paste your Notes Here...'></textarea>
                 
                 <button onClick={get_gpt_flashcards} className={styles["icon-button"]}>
-                  <div className="icon">
-                    <FontAwesomeIcon icon={faEnvelope}/>
-                  </div>
-
                   <p>Transform notes</p>
-                  
-                  
                 </button>
                 {
                     questions && currentQuestion ? <Card questions={questions} currentQuestion={currentQuestion}/> : <p> no card now</p>
                 }
+              <Card questions={questions} currentQuestion={{question: "What is the name of the 52nd president of the United States?", choices: {A: "George", B: "Washington", C: "Franklin", D: "Rooselvet"} }}/>
                 <select value={questionType} onChange={handleQuestionTypeUpdate}>
                   <option value="MCQ"> MCQ </option>
                   <option value="True/False"> True/False </option>
