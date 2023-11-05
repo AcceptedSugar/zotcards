@@ -137,6 +137,12 @@ def api_test():
     return jsonify({"message": "Hello from Flask backend!"})
 
 
+@api.route("/api/testsend", methods=["GET", "POST"])
+def api_test_send():
+    message = request.json.get('test')
+    return jsonify({"message": f"{message}"})
+
+
 @api.route("/", methods=["GET", "POST"])
 def index():
     return "INDEX"
