@@ -1,8 +1,12 @@
 "use client";
 import Image from 'next/image'
 import styles from './page.module.css'
+import FlashCard from './components/flashcard'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons'
 import { useState, useEffect, useRef } from 'react'
 import next from 'next';
+import MyComponent from "@/app/test/page";
 
 function AnswerChoice( { currentQuestionNumber, currentQuestion, answerChoice, questions, setCurrentQuestion } ) {
 
@@ -92,12 +96,17 @@ export default function Home() {
       <main className={styles.main}>
         <div className="main">
           <div className="generate-contain">
+            <MyComponent  />
             <h1>Transform your Class Notes into Self-Testing </h1>
-              <form action="#">
+              <form action="#" className = {styles.form}>
               <textarea onChange={handleNoteUpdate} className ={styles.generate} rows="4" cols="50" placeholder='Copy and Paste your Notes Here...'></textarea>
+                
                 <button onClick={get_gpt_flashcards} className={styles["icon-button"]}>
-                  <div className="icon">😅</div>
-                  <p>Transform</p>
+                  <div className="icon">
+                    <FontAwesomeIcon icon={faEnvelope}/>
+                  </div>
+
+                  <p>Transform notes</p>
                   
                 </button>
                 {

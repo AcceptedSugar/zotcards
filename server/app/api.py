@@ -1,63 +1,24 @@
+import json
 import os
 
 import openai
-import requests
 from dotenv import load_dotenv
 from flask import Blueprint, request, jsonify
-from sqlalchemy.testing import db
-import json
 
-from .model import User, CardSet, Card, AnswerChoice
+from .model import User, CardSet, Card, AnswerChoice, db
 
 api = Blueprint("api", __name__)
-
-
-@api.route("/")
-def index():
-    return "index"
 
 
 @api.route("/api/auth/signup", methods=["GET", "POST"])
 def signup():
     data = request.json
 
-    user_email = data.get('user_email') # FRONTEND NEEDS TO PROVIDE
+    user_email = data.get('user_email')  # FRONTEND NEEDS TO PROVIDE
 
     new_user = User(email=user_email)
     db.session.add(new_user)
     db.session.commit()
-
-
-def gpt_string_to_array(string):
-    string = string.replace("'", '"')
-    result = list(json.loads(string).values())
-    return result
-
-
-@api.route("/api/auth/create-card-set", methods=["GET", "POST"])
-def create_card_set(parsed_set):
-    
-    card_set = CardSet()
-    cards = []
-
-    for card in parsed_set:
-        answer_choices = []
-        for answer in card["choices"]:
-            if answer == card["correct"]:
-                answer_choices.append(AnswerChoice(answer_text=card["choices"]["answer"], is_correct=True))
-            else:
-                answer_choices.append(AnswerChoice(answer_text=card["choices"]["answer"], is_correct=True))
-        cards.append(Card(question_text=card, answer_choices=answer_choices))
-
-    db.session.add(card_set)
-    db.session.commit()
-
-
-@api.route("/api/populate_database", methods=["GET", "POST"])
-def populate_database():
-    response = get_question()
-    parsed_set = gpt_string_to_array(response)
-    create_card_set(parsed_set)
 
 
 @api.route("/api/get_user_sets", methods=["GET", "POST"])
@@ -83,18 +44,11 @@ def get_user_sets():
     return jsonify(response)
 
 
-
 # ********** GPT API ********** #
 
 load_dotenv()
 API_KEY = os.environ.get("API_KEY")
 openai.api_key = API_KEY
-
-
-def get_gpt_message(prompt, model="gpt-3.5-turbo"):
-    messages = [{"role": "user", "content": prompt}]
-    response = openai.ChatCompletion.create(model=model, messages=messages, temperature=0)
-    return response.choices[0].message["content"]
 
 
 # this is a test function to see if GPT is returning any text or if API is not working
@@ -105,6 +59,38 @@ def chat():
 
     response = get_gpt_message(chat_text)
     return response, 200
+
+
+def gpt_string_to_array(string):
+    string = string.replace("'", '"')
+    result = list(json.loads(string).values())
+    return result
+
+
+def get_gpt_message(prompt, model="gpt-3.5-turbo"):
+    messages = [{"role": "user", "content": prompt}]
+    response = openai.ChatCompletion.create(model=model, messages=messages, temperature=0)
+    return response.choices[0].message["content"]
+
+
+def create_card_set(parsed_set):
+    card_set = CardSet(title="test_title")
+
+    print(parsed_set)
+
+    for card in parsed_set:
+        db_card = Card(question_text=card["question"])
+
+        for answer in card["choices"]:
+            if answer == card["correct"]:
+                db_card.answer_choices.append(AnswerChoice(answer_text=card["choices"][answer], is_correct=True))
+            else:
+                db_card.answer_choices.append(AnswerChoice(answer_text=card["choices"][answer], is_correct=False))
+
+        card_set.cards.append(db_card)
+
+    db.session.add(card_set)
+    db.session.commit()
 
 
 @api.route("/api/get-question", methods=["GET", "POST"])
@@ -139,16 +125,18 @@ def get_question():
     response = get_gpt_message(final_prompt)
 
     parsed_set = gpt_string_to_array(response)
-    create_card_set(parsed_set) # populates database
+    create_card_set(parsed_set)  # populates database
 
-    #return response, 200
-    return None, 200
-
+    return parsed_set, 200
 
 
 # TEST
 
 @api.route("/api/test", methods=["GET", "POST"])
 def api_test():
-    return jsonify({"message": "Hello from Flask backend!"}
-)
+    return jsonify({"message": "Hello from Flask backend!"})
+
+
+@api.route("/", methods=["GET", "POST"])
+def index():
+    return "INDEX"

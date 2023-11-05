@@ -1,19 +1,64 @@
 :root {
-  /* text /
-  /* / colors / */
+  /* text */
+  
+  /* colors */
   --background-color: #0D0D0D;
   --heading-text-color: white;
   --paragraph-text-color: gray;
-  --border-color: #252525;
-  --accent-color: #3A29FE;
+  --border-color: #1c1c1c;
+  --accent-color: #3360FF;
+  --focus-background: rgba(255, 255, 255, 0.06);
 
-  /* / spacing */ 
-  --universal-margin: 20vw;
-  --btn-vw-spacing: 24px;
-  --btn-vh-spacing: 16px;
-  --container-padding: 40px;
+  /* spacing */
+  --universal-margin: 10vw;
+  --btn-vw-spacing: 32px;
+  --btn-vh-spacing: 8px;
+  --container-padding: 36px;
   --container-border-radius: 40px; 
+  --button-border-radius: 16px;
 }
+
+* {
+  font-family: 'Inter', sans-serif;
+}
+
+body, html {
+  background-color: var(--background-color);
+  width: 100vw;
+  margin: 0;
+}
+/* libraries */
+h1 {
+  color: var(--heading-text-color);
+  font-size: 3em;
+  text-align: center;
+  max-width: 600px;
+}
+h1 span {
+  color: var(--accent-color);
+}
+h2 {
+  
+}
+p, textarea {
+  color: var(--paragraph-text-color);
+  font-size: 1em;
+  line-height: 1.5;
+}
+textarea::placeholder{
+  color: white;
+  opacity: .25;
+}
+
+
+/* interactiivty */
+*:focus {
+  outline: none;
+}
+
+
+
+
 
 * {
     font-family: 'Inter', sans-serif;
@@ -32,8 +77,10 @@ h1 {
   text-align: center;
 }
 
+
 p, textarea {
   color: var(--paragraph-text-color);
   font-size: 1em;
   line-height: 1.5;
 }
+
