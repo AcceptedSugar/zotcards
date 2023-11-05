@@ -10,17 +10,6 @@ from .model import User, CardSet, Card, AnswerChoice, db
 api = Blueprint("api", __name__)
 
 
-@api.route("/api/auth/signup", methods=["GET", "POST"])
-def signup():
-    data = request.json
-
-    user_email = data.get('user_email')  # FRONTEND NEEDS TO PROVIDE
-
-    new_user = User(email=user_email)
-    db.session.add(new_user)
-    db.session.commit()
-
-
 @api.route("/api/get_user_sets", methods=["GET", "POST"])
 def get_user_sets():
     data = request.json
