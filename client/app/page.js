@@ -1,7 +1,7 @@
 "use client";
 import styles from './page.module.css'
 import {useRef, useState} from 'react'
-import Sidebar from './components/sidebar';
+// import Sidebar from './components/sidebar';
 
 
 
@@ -33,8 +33,9 @@ function FilterModal(props) {
   )
 }
 
-function AnswerChoice( { currentQuestionNumber, currentQuestion, answerChoice, questions, setCurrentQuestion } ) {
-
+function AnswerChoice( { currentQuestionNumber, currentQuestion, answerChoiceLetter, questions, setCurrentQuestion } ) {
+    const [correctness, setCorrectness] = useState()
+    
     const currentAnswerChoice = currentQuestion.choices[answerChoiceLetter]
 
     function getNextQuestion(e) { // called when the card is clicked
@@ -57,16 +58,18 @@ function AnswerChoice( { currentQuestionNumber, currentQuestion, answerChoice, q
     }
 
     return (
-        <div className={styles[correctness]}>
+        <div className={styles.answer}>
 
-            <button onClick={getNextQuestion}>
-                <div>
-                    {answerChoiceLetter}
-                </div>
+            <button className={styles.answerContain} onClick={getNextQuestion}>
+                
+                  <p>{answerChoiceLetter}.</p>
+                    &nbsp;&nbsp;&nbsp;
+                
 
-                <div>
-                    {currentAnswerChoice}
-                </div>
+                
+                  <p>{currentAnswerChoice}</p>
+                    
+                
             </button>
 
         </div>
@@ -180,7 +183,7 @@ export default function Home() {
 
     return (
             <main className={styles.main}>
-                <Sidebar    />
+                {/* <Sidebar    /> */}
 
                 <div className={styles.main}>
                     <div className={["generate-contain"]}>
@@ -196,15 +199,15 @@ export default function Home() {
                             {
                                 questions && currentQuestion ?
                                     <Card questions={questions} currentQuestion={currentQuestion}
-                                          setCurrentQuestion={setCurrentQuestion}/> : <p> no card now</p>
+                                          setCurrentQuestion={setCurrentQuestion}/> :<></>
                             }
                             
                             {showModal ? <FilterModal buttonFunction = {get_gpt_flashcards} closeCard = {closeCard}/> : null}
 
-                            <select value={questionType} onChange={handleQuestionTypeUpdate}>
+                            {/* <select value={questionType} onChange={handleQuestionTypeUpdate}>
                                 <option value="MCQ"> MCQ</option>
                                 <option value="True/False"> True/False</option>
-                            </select>
+                            </select> */}
                         </form>
                     </div>
                 </div>
