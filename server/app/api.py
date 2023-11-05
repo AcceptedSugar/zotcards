@@ -48,7 +48,7 @@ def get_user_sets():
 
 load_dotenv()
 API_KEY = os.environ.get("API_KEY")
-openai.api_key = "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"
+openai.api_key = API_KEY
 
 
 # this is a test function to see if GPT is returning any text or if API is not working
@@ -135,3 +135,8 @@ def get_question():
 @api.route("/api/test", methods=["GET", "POST"])
 def api_test():
     return jsonify({"message": "Hello from Flask backend!"})
+
+
+@api.route("/", methods=["GET", "POST"])
+def index():
+    return "INDEX"
