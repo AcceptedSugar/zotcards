@@ -4,6 +4,7 @@ import os
 import openai
 from dotenv import load_dotenv
 from flask import Blueprint, request, jsonify
+from flask_login import current_user
 
 from .model import User, CardSet, Card, AnswerChoice, db
 
