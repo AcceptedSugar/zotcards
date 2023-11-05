@@ -1,17 +1,25 @@
 "use client";
-import Image from 'next/image'
 import styles from './page.module.css'
-import FlashCard from './components/flashcard'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEnvelope } from '@fortawesome/free-solid-svg-icons'
 import { useState, useEffect, useRef } from 'react'
 import next from 'next';
-import MyComponent from "@/app/test/page";
 
-function AnswerChoice( { currentQuestionNumber, currentQuestion, answerChoice, questions, setCurrentQuestion } ) {
+function AnswerChoice( { currentQuestionNumber, currentQuestion, answerChoiceLetter, questions, setCurrentQuestion } ) {
+  const [correctness, setCorrectness] = useState('')
+
+  const currentAnswerChoice = currentQuestion.choices[answerChoiceLetter]  
 
   function getNextQuestion(e) { // called when the card is clicked
     e.preventDefault();
+    const correctAnswerChoice = currentQuestion.choices[currentQuestion.correct]
+
+    if (currentAnswerChoice == correctAnswerChoice) {
+      setCorrectness(".correct-answer")
+      alert('correct!')
+
+    } else {
+      setCorrectness(".incorrect-answer")
+      alert('incorrect')
+    }
     currentQuestionNumber.current += 1
 
     const nextQuestionNumber = (currentQuestionNumber.current) % (questions.length - 1)
@@ -20,7 +28,19 @@ function AnswerChoice( { currentQuestionNumber, currentQuestion, answerChoice, q
   }
 
   return (
-    <div> <button onClick={getNextQuestion}> <p> {currentQuestion.choices[answerChoice]} </p></button> </div>
+    <div className={styles[correctness]}> 
+
+      <button onClick={getNextQuestion}> 
+          <div>
+          {answerChoiceLetter}
+          </div>
+          
+          <div>
+          {currentAnswerChoice} 
+          </div>
+      </button> 
+    
+    </div>
   )
 
 }
@@ -44,10 +64,10 @@ function Card( {questions, currentQuestion, setCurrentQuestion } ) {
 
             <div> 
               
-              {currentQuestion.choices['A']}
-              {currentQuestion.choices['B']}
-              {currentQuestion.choices['C']}
-              {currentQuestion.choices['D']}
+              <AnswerChoice currentQuestionNumber={currentQuestionNumber} currentQuestion={currentQuestion} answerChoiceLetter={"A"} questions={questions} setCurrentQuestion={setCurrentQuestion}/>
+              <AnswerChoice currentQuestionNumber={currentQuestionNumber} currentQuestion={currentQuestion} answerChoiceLetter={"B"} questions={questions} setCurrentQuestion={setCurrentQuestion}/>
+              <AnswerChoice currentQuestionNumber={currentQuestionNumber} currentQuestion={currentQuestion} answerChoiceLetter={"C"} questions={questions} setCurrentQuestion={setCurrentQuestion}/>
+              <AnswerChoice currentQuestionNumber={currentQuestionNumber} currentQuestion={currentQuestion} answerChoiceLetter={"D"} questions={questions} setCurrentQuestion={setCurrentQuestion}/>
             </div>
 
           </div>
@@ -73,7 +93,24 @@ export default function Home() {
   async function get_gpt_flashcards(e) {
     e.preventDefault()
     console.log('getting flash cards')
-    const url = 'https://awwang3.pythonanywhere.com/api/get-question'
+    // const url = 'https://awwang3.pythonanywhere.com/api/get-question'
+    const url = 'http://127.0.0.1:5000/get-question'
+
+
+    fetch(url, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        mode: 'no-cors',
+        body: JSON.stringify(request_body)
+        })
+        .then(response => response.json())
+            .then(data => {
+                    console.log(data);
+                    setQuestions(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
     // fetch(url, {
     //   method: "POST",
     //   body: JSON.stringify(request_body)
@@ -122,7 +159,6 @@ export default function Home() {
                 {
                     questions && currentQuestion ? <Card questions={questions} currentQuestion={currentQuestion} setCurrentQuestion={setCurrentQuestion}/> : <p> no card now</p>
                 }
-              <Card questions={questions} currentQuestion={{question: "What is the name of the 52nd president of the United States?", choices: {A: "George", B: "Washington", C: "Franklin", D: "Rooselvet"} }}/>
                 <select value={questionType} onChange={handleQuestionTypeUpdate}>
                   <option value="MCQ"> MCQ </option>
                   <option value="True/False"> True/False </option>

@@ -9,6 +9,8 @@
   --accent-color: #3360FF;
   --focus-background: rgba(255, 255, 255, 0.02);
   --large-contain-color: #161616;
+  --correct-answer: #00EE43;
+  --incorrect-answer: #ED5555;
 
   /* spacing */
   --universal-margin: 10vw;
@@ -18,6 +20,23 @@
   --container-border-radius: 40px; 
   --button-border-radius: 16px;
 }
+
+.correct-answer {
+  border-color: var(--correct-answer);
+  background-color: green;
+  border-width: medium;
+
+}
+
+.incorrect-answer {
+  border-color: var(--incorrect-answer);
+  border-width: medium;
+  background-color: red;
+
+
+}
+
+
 
 * {
   font-family: 'Inter', sans-serif;
