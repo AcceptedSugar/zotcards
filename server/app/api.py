@@ -1,5 +1,6 @@
 import json
 import os
+import secrets
 
 import openai
 from dotenv import load_dotenv
@@ -66,7 +67,10 @@ def get_gpt_message(prompt, model="gpt-3.5-turbo"):
 def create_card_set(parsed_set):
     card_set = CardSet(title="test_title")
 
-    print(parsed_set)
+    if current_user.is_authenticaed:
+        my_user = current_user
+    else:
+        my_user = User(email=secrets.token_hex(64))
 
     for card in parsed_set:
         db_card = Card(question_text=card["question"])
@@ -78,6 +82,8 @@ def create_card_set(parsed_set):
                 db_card.answer_choices.append(AnswerChoice(answer_text=card["choices"][answer], is_correct=False))
 
         card_set.cards.append(db_card)
+
+    my_user.card_sets.append(card_set)
 
     db.session.add(card_set)
     db.session.commit()
