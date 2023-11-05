@@ -129,21 +129,21 @@ export default function Home() {
         'question_type': questionType
     }
 
-    async function get_gpt_flashcards(e) {
-        e.preventDefault()
-        console.log('getting flash cards')
-        // const url = 'https://awwang3.pythonanywhere.com/api/get-question'
-        const url = 'http://127.0.0.1:5000/api/get-question'
+  async function get_gpt_flashcards(e) {
+    e.preventDefault()
+    console.log(questionType)
 
-        console.log(JSON.stringify(request_body))
+    console.log('getting flash cards')
+    // const url = 'https://awwang3.pythonanywhere.com/api/get-question'
+    const url = 'http://127.0.0.1:5000/api/get-question'
+    console.log('requestbody: ')
+    console.log(request_body)
 
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            // mode: 'no-cors',
-            body: JSON.stringify(request_body)
+    fetch(url, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        mode: 'no-cors',
+        body: JSON.stringify(request_body)
         })
             .then(response => response.json())
             .then(data => {
@@ -153,28 +153,6 @@ export default function Home() {
             .catch(error => {
                 console.error('Error:', error);
             });
-        // fetch(url, {
-        //   method: "POST",
-        //   body: JSON.stringify(request_body)
-        // })
-        //     .then(response => response.json())
-        //     .then(data => {
-        //       console.log(data);
-        //       setQuestions(data);
-        //       setCurrentQuestion(data['q1'])
-        //     })
-        //     .catch(error => {
-        //       console.error('Error:', error);
-        //     });
-
-        // const flashcard_questions = await fetch(url, {
-        //   method: "POST",
-        //   body: JSON.stringify(request_body)
-        // })
-        // console.log(flashcard_questions)
-
-        // setQuestions(flashcard_questions)
-        // setCurrentQuestion(flashcard_questions['q1'])
     }
 
     function handleNoteUpdate(e) {
