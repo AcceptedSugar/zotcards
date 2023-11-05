@@ -94,6 +94,88 @@
     cursor: pointer;
     font-size: 20px;
 }
+/* answer choices */
+.answer {
+  display: grid;
+  gap: 20px;
+  place-content: center;
+  grid-template-columns: repeat(2, 1fr);
+
+}
+.answerContain button{
+  width: 100%;
+  border-radius: 20px;
+  border: var(--border-color) 2px solid;
+  padding: var(--btn-vh-spacing) var(--btn-vw-spacing);
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  background-color: var(--large-contain-color);
+  transition: border-color 200ms;
+}
+
+/* pop up filtering */
+
+.dropDown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropDown select {
+  color: white;
+  background-color: var(--large-contain-color);
+  width: 100%;
+  border-radius: 20px;
+  border: var(--border-color) 2px solid;
+  padding: 22px var(--btn-vw-spacing);
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  margin-bottom: 5vh;
+}
+.filterModal .close {
+  position: absolute;
+    display: grid;
+    place-content: center;
+
+    right: 20px;
+    margin-bottom: 20px;
+    
+
+
+    cursor: pointer;
+}
+
+.filterActionContain {
+  width: 400px;
+}
+.filterActionContain .icon-button {
+  width: 100%;
+}
+.filterModal {
+  position: fixed;
+
+    top: 10vh;
+    width: 400px;
+    max-height: 80vh;
+
+    left: calc(50vw - 225px);
+    margin: 0;
+
+    overflow: scroll;
+
+    border: none;
+    border-radius: 12px;
+    background-color: var(--large-contain-color);
+    padding: var(--container-padding);
+}
+.filterModal::backdrop {
+  background: black;
+  opacity: 0.75;
+}
+
 /* interactivity */
 .generate:hover {
   border-color: var(--accent-color);
@@ -108,5 +190,17 @@
   box-shadow: 0px 0px 12px rgba(51, 96, 255, .5);
   background-color: rgba(51, 96, 255, .8);
 }
-
-
+.answerContain button:hover {
+  background-color: var(--focus-background);
+  border-color: var(--accent-color);
+  color: white;
+}
+.answerContain button:hover p {
+  color: white;
+}
+.dropDown:hover select {
+  display: block;
+  background-color: var(--focus-background);
+  border-color: var(--accent-color);
+  cursor: pointer;
+}

@@ -2,8 +2,37 @@
 import styles from './page.module.css'
 import {useRef, useState} from 'react'
 
-function AnswerChoice({currentQuestionNumber, currentQuestion, answerChoiceLetter, questions, setCurrentQuestion}) {
-    const [correctness, setCorrectness] = useState('')
+
+
+function FilterModal(props) {
+  return (
+    <div className ={styles.filterModal}>
+      
+      <div className={styles.close} onClick={props.closeCard}>x</div>
+      <h2>Set up Filter Options</h2>
+      <p>Tailor flashcards to your learning style</p>
+
+      <div className={styles.filterActionContain}>
+        <div className={styles.dropDown}>
+                <select onChange={() => {}}>
+                            <option value="MCQ"> MCQ </option>
+                            <option value="True/False"> True/False </option>
+                </select>   
+            </div>
+            
+
+            <button className={styles["icon-button"]} onClick={props.buttonFunction}>
+              <p>Set filters</p>          
+            </button>
+      </div>
+      
+    </div>
+    
+
+  )
+}
+
+function AnswerChoice( { currentQuestionNumber, currentQuestion, answerChoice, questions, setCurrentQuestion } ) {
 
     const currentAnswerChoice = currentQuestion.choices[answerChoiceLetter]
 
@@ -44,8 +73,21 @@ function AnswerChoice({currentQuestionNumber, currentQuestion, answerChoiceLette
 
 }
 
-function Card({questions, currentQuestion, setCurrentQuestion}) {
-    const currentQuestionNumber = useRef(0)
+// function Card({questions, currentQuestion, setCurrentQuestion}) {
+//     const currentQuestionNumber = useRef(0)
+//   return (
+//     <div className={styles.answerContain}> 
+//       <div className="answerChoice">
+//       </div>
+//       <button onClick={getNextQuestion}> <p> {answerChoice} {currentQuestion.choices[answerChoice]} </p></button> 
+//     </div>
+//   )
+
+// }
+
+
+function Card( {questions, currentQuestion, setCurrentQuestion } ) {
+  const currentQuestionNumber = useRef(0)
 
     return (
         <div>
@@ -61,7 +103,7 @@ function Card({questions, currentQuestion, setCurrentQuestion}) {
                         <h2>{currentQuestion.question}</h2>
                     </div>
 
-                    <div>
+                    <div className={styles.answerContain}>
 
                         <AnswerChoice currentQuestionNumber={currentQuestionNumber} currentQuestion={currentQuestion}
                                       answerChoiceLetter={"A"} questions={questions}
@@ -80,8 +122,6 @@ function Card({questions, currentQuestion, setCurrentQuestion}) {
                 </div>
 
             </div>
-
-            {/* <button onClick={getNextQuestion}> Next Question </button> */}
         </div>
     )
 }
@@ -91,7 +131,10 @@ export default function Home() {
     const [currentQuestion, setCurrentQuestion] = useState()
 
     const [notes, setNotes] = useState()
+    const [showModal, setFilterState] = useState(false)
+
     const [questionType, setQuestionType] = useState("MCQ")
+    const [showQuestions, setShowQuestions] = useState(false)
 
     const request_body = {
         'notes': notes,
@@ -135,7 +178,6 @@ export default function Home() {
     }
 
     return (
-        <>
             <main className={styles.main}>
                 <div className={styles.main}>
                     <div className={["generate-contain"]}>
@@ -153,6 +195,9 @@ export default function Home() {
                                     <Card questions={questions} currentQuestion={currentQuestion}
                                           setCurrentQuestion={setCurrentQuestion}/> : <p> no card now</p>
                             }
+                            
+                            {showModal ? <FilterModal buttonFunction = {get_gpt_flashcards} closeCard = {closeCard}/> : null}
+
                             <select value={questionType} onChange={handleQuestionTypeUpdate}>
                                 <option value="MCQ"> MCQ</option>
                                 <option value="True/False"> True/False</option>
@@ -161,8 +206,6 @@ export default function Home() {
                     </div>
                 </div>
             </main>
-        </>
-
     )
 }
 

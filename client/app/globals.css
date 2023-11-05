@@ -52,7 +52,7 @@ h1 {
   color: var(--heading-text-color);
   font-size: 3em;
   text-align: center;
-  margin: 0 20vw;
+  margin: 0 5vw;
   margin-bottom: 8vh;
 }
 h1 span {
@@ -66,7 +66,7 @@ h2 {
 }
 p, textarea {
   color: var(--paragraph-text-color);
-  font-size: 1em;
+  font-size: 1.25em;
   line-height: 1.5;
 }
 textarea::placeholder{
